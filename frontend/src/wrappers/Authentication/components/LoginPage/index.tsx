@@ -5,6 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Divider from '@material-ui/core/Divider';
+import { InputProps } from '@material-ui/core/Input';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -19,6 +20,7 @@ type ClassNames = 'root' | 'paper' | 'heading' | 'divider' | 'additionalActions'
 
 type Props = {
     classes?: Record<ClassNames, string>;
+    authenticateUser: (username: string, password: string) => void;
 };
 
 type State = {
@@ -68,6 +70,13 @@ export class LoginPage extends React.Component<Props, State> {
         dialogOpen: false,
     }
 
+    componentDidMount = () => {
+        console.log(window.location.href.split('/')[1]);
+        if (window.location.href.split('/')[1] !== '') {
+            window.location.href = '/login';
+        }
+    }
+
     handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const { values } = this.state;
         
@@ -80,7 +89,9 @@ export class LoginPage extends React.Component<Props, State> {
     }
 
     handleSubmit = (values: Record<string, string>) => (e: React.MouseEvent<HTMLButtonElement> | null) => {
-        console.log('Submitted', values);
+        const { authenticateUser } = this.props;
+
+        authenticateUser(values.username, values.password);
     }
 
     handleNetIDHelp = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,6 +105,7 @@ export class LoginPage extends React.Component<Props, State> {
     render = () => {
         const { values, dialogOpen } = this.state;
         const { classes } = this.props;
+
         return (
             <div className={classes?.root} >
                 <Paper className={classes?.paper}>
@@ -109,6 +121,9 @@ export class LoginPage extends React.Component<Props, State> {
                         handleSubmit={this.handleSubmit}
                         submitLabel="Sign In"
                         submitAriaLabel="sign in"
+                        SubmitButtonProps={{
+                            color: 'primary',
+                        }}
                         formData={[
                             {
                                 label: 'NSHE ID or NetID',

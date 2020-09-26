@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+import Button, { ButtonProps } from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import Input, { InputProps } from '@material-ui/core/Input';
+import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from '@material-ui/core/styles/withStyles';
 import { InputAdornment } from '@material-ui/core';
@@ -24,6 +24,8 @@ type FormData = {
     endAdornmentFunction?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     autoComplete?: string;
     required?: boolean;
+    InputProps?: InputProps;
+    InputLabelProps?: InputLabelProps;
     field: string;
 };
 
@@ -33,6 +35,7 @@ type Props = {
     handleSubmit: (values: Record<string, string>) => (e: React.MouseEvent<HTMLButtonElement> | null) => void;
     submitLabel: string;
     submitAriaLabel?: string;
+    SubmitButtonProps?: ButtonProps;
     enterSubmit?: boolean;
     formData: FormData[];
     classes?: Record<ClassNames, string>
@@ -128,6 +131,7 @@ export class Form extends React.Component<Props, State> {
             formData,
             submitLabel,
             submitAriaLabel,
+            SubmitButtonProps,
             enterSubmit,
         } = this.props;
         const { values: stateValues, toggleTypes, errors } = this.state;
@@ -145,7 +149,7 @@ export class Form extends React.Component<Props, State> {
 
                     return (
                         <FormControl key={f.field} error={!!errors[f.field]}>
-                            <InputLabel htmlFor={`${classes?.root}-${f.field}`}>
+                            <InputLabel htmlFor={`${classes?.root}-${f.field}`} {...f.InputLabelProps} >
                                 {f.label}
                             </InputLabel>
                             <Input
@@ -168,6 +172,7 @@ export class Form extends React.Component<Props, State> {
                                                 </IconButton>
                                             </InputAdornment>) : null}
                                 aria-describedby={`${classes?.root}-${f.field}-error`}
+                                {...f.InputProps}
                             />
                             <FormHelperText id={`${classes?.root}-${f.field}-error`}>{errors[f.field]}</FormHelperText>
                         </FormControl>
@@ -175,9 +180,10 @@ export class Form extends React.Component<Props, State> {
                 })}
                 <Button
                     onClick={this.verifySubmit}
-                    color="primary"
+                    // color="primary"
                     variant="contained"
                     aria-label={submitAriaLabel}
+                    {...SubmitButtonProps}
                 >
                     {submitLabel}
                 </Button>
