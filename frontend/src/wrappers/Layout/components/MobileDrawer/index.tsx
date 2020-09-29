@@ -25,8 +25,6 @@ const useStyles = makeStyles<Theme, ClassNames>((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         minHeight: theme.spacing(7),
-        boxShadow: theme.shadows[1],
-        zIndex: theme.zIndex.drawer + 1,
     },
     logo: {
         display: 'flex',
@@ -59,7 +57,7 @@ export const MobileDrawer: React.FC<Props> = ({ open, handleDrawer }) => {
                     <Typography variant="caption">University of Nevada<br />Reno</Typography>
                 </div>
             </div>
-            {/* <Divider /> */}
+            <Divider />
             <div className={classes.scrollable}>
                 <DrawerContent open={open} handleDrawer={handleDrawer} closeOnLink />
             </div>

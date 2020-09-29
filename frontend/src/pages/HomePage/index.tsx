@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Paper from '@material-ui/core/Paper';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from '@material-ui/core/styles/withStyles';
 
@@ -82,13 +83,15 @@ export class HomePage extends React.Component<Props, State> {
                         value: 'academics',
                         component: () => (
                             <Table
+                                component={({ children }) => <Paper variant="outlined">{children}</Paper>}
                                 head={[
                                     { text: 'Class' },
-                                    { text: 'Schedule' }
+                                    { text: 'Schedule', props: { align: 'right' } }
                                 ]}
                                 rows={[
-                                    { name: 'BASQ 471-1001', cols: [{ text: 'BASQ 471-1001' }, { text: 'TuTh 12:00 - 13:10' }] },
-                                    { name: 'CH 201-5504', cols: [{ text: 'CH 201-5504' }, { text: 'WEB WEB' }] }
+                                    { name: 'CS 135 - 1001', cols: [{ text: 'CS 135 - 1001', props: { component: 'th', scope: 'row' } }, { text: 'TuTh 12:00 - 13:10', props: { align: 'right' } }] },
+                                    { name: 'MATH 181 - 1002', cols: [{ text: 'MATH 181 - 1002', props: { component: 'th', scope: 'row' } }, { text: 'MWF 15:30 - 16:20', props: { align: 'right' } }] },
+                                    { name: 'CH 201 - 1001', cols: [{ text: 'CH 201 - 1001', props: { component: 'th', scope: 'row' } }, { text: 'WEB WEB', props: { align: 'right' } }] }
                                 ]}
                             />
                         ),

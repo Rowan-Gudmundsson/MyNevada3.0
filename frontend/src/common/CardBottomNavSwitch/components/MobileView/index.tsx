@@ -92,7 +92,7 @@ export const CardBottomNavSwitch: React.FC<Props> = ({ content, actions, sideCon
                     indicatorColor="secondary"
                     textColor="secondary"
                     variant="scrollable"
-                    scrollButtons="auto"
+                    scrollButtons="on"
                     aria-label="selection tabs"
                 >
                     {actions.map(({ label, value, icon }, ind) => (
