@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -95,10 +96,10 @@ export const CardBottomNavSwitch: React.FC<Props> = ({ content, actions, sideCon
                     aria-label="selection tabs"
                 >
                     {actions.map(({ label, value, icon }, ind) => (
-                        <Tab key={value} label={label} {...makeProps(ind)} />
+                        <Tab key={value} label={label} icon={<Icon>{icon}</Icon>} {...makeProps(ind)} />
                     ))}
                     {sideContentHeading && (
-                        <Tab label={sideContentHeading} {...makeProps(actions.length)} />
+                        <Tab label={sideContentHeading} icon={<Icon>{sideContentIcon}</Icon>} {...makeProps(actions.length)} />
                     )}
                 </Tabs>
             </Paper>

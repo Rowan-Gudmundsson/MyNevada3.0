@@ -98,7 +98,6 @@ export const CardView: React.FC<Props> = ({ actions, content, sideContent, sideC
                                         <Content />
                                     </Paper>
                                 </Collapse>
-                                {minimized[value] && ind !== actions.length - 1 && <Divider />}
                             </Grid>
                         )
                     })}
