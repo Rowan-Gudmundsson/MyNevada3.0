@@ -7,18 +7,18 @@ import IconButton from '@material-ui/core/IconButton';
 import MUIAppbar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/core/styles/withStyles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 type ClassNames = 'root' | 'drawerOpen' | 'menuButton' | 'hide' | 'toolbar';
 
 interface Props {
-    handleDrawerOpen: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    drawerOpen: boolean;
+    handleDrawer: (open: boolean) => (e: any) => void;
+    open: boolean;
+    large: boolean;
     classes?: Record<ClassNames, string>;
 };
 
-const styles: Styles<Theme, Props, ClassNames> = (theme) => ({
+const useStyles = makeStyles<Theme, ClassNames>((theme) => ({
     root: {
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
@@ -27,8 +27,12 @@ const styles: Styles<Theme, Props, ClassNames> = (theme) => ({
         }),
     },
     drawerOpen: {
-        marginLeft: theme.spacing(40),
-        width: `calc(100% - ${theme.spacing(40)}px)`,
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 0,
+            width: '100%',
+        },
+        marginLeft: theme.spacing(30),
+        width: `calc(100% - ${theme.spacing(30)}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -43,43 +47,38 @@ const styles: Styles<Theme, Props, ClassNames> = (theme) => ({
     toolbar: {
         padding: theme.spacing(0, 2),
     }
-});
+}));
 
-export class Appbar extends React.Component<Props> {
+export const Appbar: React.FC<Props> = ({ handleDrawer, open, large }) => {
+    const classes = useStyles();
 
-    render = () => {
-        const {
-            handleDrawerOpen,
-            drawerOpen,
-            classes,
-        } = this.props;
-
-        return (
-            <MUIAppbar
-                position="fixed"
-                className={clsx(classes?.root, {
-                    [classes?.drawerOpen || '']: drawerOpen,
-                })}
-            >
-                <Toolbar className={classes?.toolbar}>
+    return (
+        <MUIAppbar
+            position="fixed"
+            className={clsx(classes.root, {
+                [classes.drawerOpen]: open,
+            })}
+        >
+            <Toolbar className={classes.toolbar}>
+                {!large && (
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={handleDrawerOpen}
+                        onClick={handleDrawer(true)}
                         edge="start"
-                        className={clsx(classes?.menuButton, {
-                            [classes?.hide || '']: drawerOpen,
+                        className={clsx(classes.menuButton, {
+                            [classes.hide]: open,
                         })}
                     >
                         <Icon>menu</Icon>
                     </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Student Center
+                )}
+                <Typography variant="h6" noWrap>
+                    Student Center
                     </Typography>
-                </Toolbar>
-            </MUIAppbar>
-        );
-    }
+            </Toolbar>
+        </MUIAppbar>
+    )
 }
 
-export default withStyles(styles)(Appbar);
+export default Appbar;

@@ -2,7 +2,6 @@ import React from 'react';
 
 import Container from '@material-ui/core/Container';
 import MUITable from '@material-ui/core/Table';
-import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow, { TableRowProps } from '@material-ui/core/TableRow';
@@ -19,14 +18,14 @@ interface Props {
     component?: React.ComponentType;
     rows: {
         name: string;
-        props: TableRowProps;
+        props?: TableRowProps;
         cols: {
-            props: TableCellProps;
+            props?: TableCellProps;
             text: string;
         }[]
     }[];
     head: {
-        props: TableCellProps;
+        props?: TableCellProps;
         text: string;
     }[];
     size?: 'small' | 'medium';

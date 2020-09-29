@@ -1,36 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import clsx from 'clsx';
 
-import { withStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/core/styles/withStyles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 
 import Appbar from './components/Appbar';
-import Drawer from './components/Drawer';
+import MobileDrawer from './components/MobileDrawer';
+import MediumDrawer from './components/MediumDrawer';
+import LargeDrawer from './components/LargeDrawer';
 
 type ClassNames = 'root' | 'content' | 'contentShift';
 
-interface Props {
-    classes?: Record<ClassNames, string>;
-};
+interface Props { };
 
 interface State {
     drawerOpen: boolean;
 };
 
-const styles: Styles<Theme, Props, ClassNames> = (theme) => ({
+const useStyles = makeStyles<Theme, ClassNames>((theme) => ({
     root: {
         display: 'flex',
     },
     content: {
+        [theme.breakpoints.down('xs')]: { // mobile
+            top: theme.spacing(7),
+            height: `calc(100% - ${theme.spacing(7)}px)`,
+            left: 0,
+        },
+        [theme.breakpoints.up('sm')]: {
+            padding: theme.spacing(1, 1, 0, 1),
+            width: `calc(100% - ${theme.spacing(7) + 1}px)`,
+        },
+        [theme.breakpoints.up('lg')]: { // desktop
+            left: theme.spacing(30),
+            width: `calc(100% - ${theme.spacing(30)}px)`,
+        },
         height: `calc(100% - ${theme.spacing(8)}px)`,
+        top: theme.spacing(8),
+        left: theme.spacing(7) + 1,
         width: '100%',
         display: 'flex',
         position: 'fixed',
-        top: theme.spacing(8),
-        left: theme.spacing(7) + 1,
-        padding: theme.spacing(1, 0, 0, 1),
-        transition: theme.transitions.create('left', {
+        transition: theme.transitions.create(['left', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
@@ -39,46 +51,54 @@ const styles: Styles<Theme, Props, ClassNames> = (theme) => ({
         }
     },
     contentShift: {
-        left: theme.spacing(40),
-        transition: theme.transitions.create('left', {
+        [theme.breakpoints.down('xs')]: { // mobile
+            left: 0,
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${theme.spacing(30)}px)`,
+        },
+        left: theme.spacing(30),
+        transition: theme.transitions.create(['left', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
-        })
+        }),
     },
-});
+}));
 
-export class Layout extends React.Component<Props, State> {
-    state: State = {
-        drawerOpen: false,
+export const Layout: React.FC<Props> = ({ children }) => {
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const handleDrawer = (open: boolean) => (e: any) => {
+        setDrawerOpen(open);
     }
 
-    handleDrawerOpen = (e: React.MouseEvent<HTMLButtonElement> | null) => {
-        this.setState({ drawerOpen: true });
-    }
+    const classes = useStyles();
+    const theme = useTheme();
 
-    handleDrawerClose = (e: React.MouseEvent<HTMLButtonElement> | React.FocusEvent<HTMLDivElement>) => {
-        this.setState({ drawerOpen: false });
-    }
+    const mobile = useMediaQuery(theme.breakpoints.down('xs'));
+    const desktop = useMediaQuery(theme.breakpoints.up('lg'));
 
-    render = () => {
-        const { classes, children } = this.props;
-        const { drawerOpen } = this.state;
-        return (
-            <div className={classes?.root}>
-                <Appbar handleDrawerOpen={this.handleDrawerOpen} drawerOpen={drawerOpen} />
-                <Drawer handleDrawerClose={this.handleDrawerClose} drawerOpen={drawerOpen} handleDrawerOpen={this.handleDrawerOpen} />
-                <div
-                    tabIndex={-1}
-                    className={clsx(classes?.content, {
-                        [classes?.contentShift || '']: drawerOpen,
-                    })}
-                    onFocus={this.handleDrawerClose}
-                >
-                    {children}
-                </div>
+    const Drawer = mobile
+        ? MobileDrawer
+        : desktop
+            ? LargeDrawer
+            : MediumDrawer;
+
+    return (
+        <div className={classes.root}>
+            <Appbar handleDrawer={handleDrawer} open={drawerOpen} large={desktop} />
+            <Drawer handleDrawer={handleDrawer} open={drawerOpen} />
+            <div
+                tabIndex={-1}
+                className={clsx(classes.content, {
+                    [classes.contentShift || '']: drawerOpen,
+                })}
+                onFocus={handleDrawer(false)}
+            >
+                {children}
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-export default withStyles(styles)(Layout);
+export default Layout;

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { createMuiTheme } from '@material-ui/core/styles';
+import { unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 
-export const theme = createMuiTheme({
+export const theme = unstable_createMuiStrictModeTheme({
     palette: {
         type: 'light',
         primary: {

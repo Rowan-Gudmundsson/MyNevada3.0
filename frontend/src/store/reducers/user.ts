@@ -7,10 +7,10 @@ export interface State {
 
 export interface Action {
     type: 'REQUEST_TOKEN'
-        | 'VERIFY_TOKEN'
-        | 'TOKEN_SUCCESS'
-        | 'TOKEN_FAILURE'
-        | 'LOGOUT_USER';
+    | 'VERIFY_TOKEN'
+    | 'TOKEN_SUCCESS'
+    | 'TOKEN_FAILURE'
+    | 'LOGOUT_USER';
     data?: object;
     error?: string;
 }
@@ -21,6 +21,7 @@ const INITIAL_STATE: State = {
     error: null,
     data: null,
 };
+
 
 export default (state = INITIAL_STATE, action?: Action): State => {
     switch (action?.type) {
