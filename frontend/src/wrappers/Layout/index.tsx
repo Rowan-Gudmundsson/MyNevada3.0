@@ -48,7 +48,8 @@ const useStyles = makeStyles<Theme, ClassNames>((theme) => ({
         }),
         '&:focus': {
             outline: '0px solid transparent',
-        }
+        },
+        overflowY: 'auto',
     },
     contentShift: {
         [theme.breakpoints.down('xs')]: { // mobile

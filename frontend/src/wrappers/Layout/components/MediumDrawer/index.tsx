@@ -13,7 +13,7 @@ import UNRLogo from 'icons/UNRLogo';
 
 import DrawerContent from '../DrawerContent';
 
-type ClassNames = 'root' | 'toolbar' | 'drawerClosed' | 'drawerOpen' | 'logo';
+type ClassNames = 'root' | 'toolbar' | 'drawerClosed' | 'drawerOpen' | 'logo' | 'scrollable';
 
 interface Props {
     open: boolean;
@@ -47,7 +47,7 @@ const useStyles = makeStyles<Theme, ClassNames>((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: theme.spacing(8),
+        minHeight: theme.spacing(8),
     },
     drawerClosed: {},
     drawerOpen: {},
@@ -60,6 +60,10 @@ const useStyles = makeStyles<Theme, ClassNames>((theme) => ({
             marginLeft: theme.spacing(),
             textAlign: 'justify',
         }
+    },
+    scrollable: {
+        overflowY: 'auto',
+        height: `calc(100% - ${theme.spacing(8)})`
     }
 }));
 
@@ -86,7 +90,9 @@ export const MediumDrawer: React.FC<Props> = ({ open, handleDrawer }) => {
                 </IconButton>
             </div>
             <Divider />
-            <DrawerContent handleDrawer={handleDrawer} open={open} />
+            <div className={classes.scrollable}>
+                <DrawerContent handleDrawer={handleDrawer} open={open} />
+            </div>
         </Drawer>
     );
 }
